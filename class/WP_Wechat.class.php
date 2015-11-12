@@ -1118,12 +1118,13 @@ class WP_Wechat {
      *
      * url:http://mp.weixin.qq.com/wiki/2/07112acf4bb9a19d50c8ae08515a2a6a.html
      */
-    public function get_menu() {
-        return json_decode($this->_request_api(
+    function get_menu() {
+        $result = json_decode($this->_request_api(
             add_query_arg(array(
                 'access_token'  => $this->access_token,
             ),'https://api.weixin.qq.com/cgi-bin/menu/get')
         ));
+        return isset($result->menu) ? $result->menu->button : $result;
     }
 
     /**
@@ -1292,6 +1293,22 @@ class WP_Wechat {
                 'access_token'  => $this->access_token,
             ),'https://api.weixin.qq.com/cgi-bin/customservice/getkflist')
         ));
+    }
+
+    /**
+     * 将一个请求内的输出信息保存到 /tmp/wechat.log 文件中
+     * @param string $msg
+     * @param string $file
+     * @author huangwc
+     */
+    function log($msg, $file='') {
+        $file = $file ?: dirname(tempnam(0, 0)).'/wechat.log';
+        global $wechat_log_init;
+        if(!$wechat_log_init) {
+            $wechat_log_init = true;
+            file_put_contents($file, '');
+        }
+        file_put_contents($file, $msg."\n", FILE_APPEND);
     }
 };
 
