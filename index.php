@@ -60,10 +60,14 @@ add_action('admin_menu', function () {
             <?php $wx = new WP_Wechat(); ?>
             <h2>微信菜单设置</h2>
             <form method="post" id="form_wechat_menu">
-                <textarea style="width: 100%" rows="8" id="wechat_menu" name="wechat_menu"><?=$wx->_json_encode_dealer($wx->get_menu());?></textarea>
                 <?php if($_POST) {
-                    var_dump($wx->create_menu(json_decode(wp_unslash($_POST['wechat_menu']))->menu->button));
+                    var_dump($wx->create_menu(
+                        json_decode(wp_unslash($_POST['wechat_menu']))));
                 } ?>
+                <textarea style="width: 100%" rows="8" id="wechat_menu"
+                          name="wechat_menu"><?php
+                    echo json_encode($wx->get_menu(), JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
+                    ?></textarea>
                 <?php submit_button(); ?>
             </form>
         </div><?php
