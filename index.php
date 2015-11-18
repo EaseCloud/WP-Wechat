@@ -14,8 +14,6 @@ Text Domain: wp_wechat
 
 define('WXD', 'wp_wechat');
 
-//var_dump(add_query_arg(array('action' => 'wechat_callback'), home_url('/wp-admin/admin-ajax.php')));
-
 /**
  * 引入类文件
  * TODO: 存疑，动态引入库是否会有安全性考虑？
@@ -48,31 +46,9 @@ add_action('admin_menu', function () {
         'wechat_plugin_options'                     // function (callback)
     );
 
-    function wechat_plugin_options() { ?>
-        <div class="wrap">
-            <h2><?php _e('Wechat Settings', 'wp_wechat'); ?></h2>
-            <form method="post" action="options.php">
-                <?php settings_fields(WP_Wechat::$OPTION_GROUP); ?>
-                <?php do_settings_sections('options-wechat'); ?>
-                <?php submit_button(); ?>
-            </form>
-            <!-- TODO: 临时菜单配置 -->
-            <?php $wx = new WP_Wechat(); ?>
-            <h2>微信菜单设置</h2>
-            <form method="post" id="form_wechat_menu">
-                <?php if($_POST) {
-                    var_dump($wx->create_menu(
-                        json_decode(wp_unslash($_POST['wechat_menu']))));
-                } ?>
-                <textarea style="width: 100%" rows="8" id="wechat_menu"
-                          name="wechat_menu"><?php
-                    echo json_encode($wx->get_menu(), JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
-                    ?></textarea>
-                <?php submit_button(); ?>
-            </form>
-        </div><?php
+    function wechat_plugin_options() {
+        include_once 'option-page.php';
     }
-
 });
 
 /**
