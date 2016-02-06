@@ -88,7 +88,7 @@ add_action('admin_init', function() {
         add_settings_field(
             $field_name,                            // id
             @$args['title'] ?: $field_name,         // title
-            'field_renderer',                       // callback
+            '_wechat_field_renderer',                       // callback
             'options-wechat',                       // page
             'section-basic',                        // section
             array_merge(array(
@@ -101,7 +101,7 @@ add_action('admin_init', function() {
 
     }
 
-    function field_renderer($args) {
+    function _wechat_field_renderer($args) {
         $field_name = $args['field_name'];
         $field_title = @$args['title'] ?: $field_name;
         $field_type = @$args['type'] ?: 'text';
@@ -125,3 +125,11 @@ add_action('admin_init', function() {
 
 });
 
+
+/**
+ * Enqueue JSSDK
+ */
+add_action( 'wp_enqueue_scripts', function() {
+    // http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html
+    wp_enqueue_script('jweixin', get_template_directory_uri() . '/lib/jweixin-1.0.0.js', array(), '1.0.0');
+});

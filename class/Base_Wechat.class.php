@@ -99,7 +99,7 @@ class Base_Wechat {
         foreach($args as $k => $v) {
             $addition .= $k.'='.$v.'&';
         }
-        $parsed_url['query'] .= isset($parsed_url['query']) ? '&'.$addition: $addition;
+        $parsed_url['query'] = (@$parsed_url['query']?:'') . isset($parsed_url['query']) ? '&'.$addition: $addition;
 
         $new_url = $parsed_url['scheme'].'://'.$parsed_url['host'].$parsed_url['path'];
 
@@ -136,10 +136,10 @@ class Base_Wechat {
         $this->token_modified_time = time();
         $re['token_modified_time'] = $this->token_modified_time;
 
-        $this->access_token = $token_result->access_token;
+        $this->access_token = @$token_result->access_token ?: '';
         $re['access_token'] = $this->access_token;
 
-        $this->token_expire = $token_result->expires_in;
+        $this->token_expire = @$token_result->expires_in ?: '';
         $re['token_expire'] = $this->token_expire;
 
         $re['app_confirm_identify'] = md5($this->app_id.'|'.$this->app_secret);
@@ -1150,11 +1150,12 @@ class Base_Wechat {
      * url:http://mp.weixin.qq.com/wiki/2/07112acf4bb9a19d50c8ae08515a2a6a.html
      */
     public function getMenu() {
-        return json_decode($this->_requestApi(
+        $result = @json_decode($this->_requestApi(
             $this->_addQueryArg(array(
                 'access_token'  => $this->access_token,
             ),'https://api.weixin.qq.com/cgi-bin/menu/get')
-        ))->menu->button;
+        ));
+        return @$result->menu->button ?: null;
     }
 
     /**

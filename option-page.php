@@ -32,42 +32,43 @@ if($_POST) {
         <input type="hidden" name="wechat_action" value="update_access_token"/>
         <input type="submit" class="button button-primary" value="刷新access token" />
     </form>
+
+    <!-- 微信待单设置 -->
+    <?php $menus = $wx->getMenu(); if($menus) {?>
     <h3>微信菜单设置</h3>
     <div id="menu-field">
         <a href="javascript:;" class="plus-main-menu">+主菜单</a>
         <ul id="menu-block" >
-            <?php
-            $menus = $wx->getMenu();
-            if(sizeof($menus) > 0) { ?>
-                <?php foreach($menus as $item) { ?>
-                    <li class="main-menu">
-                        <a href="javascript:;" class="menu-item main-item"
-                            <?php
-                            $menu_type = !empty($item->sub_button) ? 'main_menu' : $item->type;
-                            echo "data-type='$menu_type' data-name='$item->name' data-key='$item->key'
-                            data-media-id='$item->media_id' data-url='$item->url' " ?> ><?php echo $item->name; ?>
-                        </a>
-                        <a href="javascript:;" class="plus-sub-menu">+子菜单</a>
-                        <a href="javascript:;" class="min-menu min-main-menu">-</a>
-                        <ul class="sub-menu-block">
-                            <?php if(sizeof($item->sub_button) > 0) { // 子菜单?>
-                                <?php foreach($item->sub_button as $sub_item) { ?>
-                                    <li class="sub-menu">
-                                        <span>*</span>
-                                        <a href="javascript:;" class="menu-item sub-item"
-                                            <?php
-                                            $menu_type = !empty($sub_item->sub_button) ? 'main_menu' : $sub_item->type;
-                                            echo "data-type='$menu_type' data-name='$sub_item->name' data-key='$sub_item->key'
-                                            data-media-id='$sub_item->media_id' data-url='$sub_item->url' " ?> ><?php echo $sub_item->name; ?>
-                                        </a>
-                                        <a href="javascript:;" class="min-menu min-sub-menu">-</a>
-                                    </li>
-                                <?php } ?>
-                            <?php } ?>
-                        </ul>
-                    </li>
-                <?php } ?>
-            <?php } ?>
+            <?php if(sizeof($menus) > 0) {
+                foreach($menus as $item) { ?>
+            <li class="main-menu">
+                <a href="javascript:;" class="menu-item main-item"
+                    <?php
+                    $menu_type = !empty($item->sub_button) ? 'main_menu' : $item->type;
+                    echo "data-type='$menu_type' data-name='$item->name' data-key='$item->key'
+                    data-media-id='$item->media_id' data-url='$item->url' " ?> ><?php echo $item->name; ?>
+                </a>
+                <a href="javascript:;" class="plus-sub-menu">+子菜单</a>
+                <a href="javascript:;" class="min-menu min-main-menu">-</a>
+                <ul class="sub-menu-block">
+                    <?php if(sizeof($item->sub_button) > 0) { // 子菜单?>
+                        <?php foreach($item->sub_button as $sub_item) { ?>
+                            <li class="sub-menu">
+                                <span>*</span>
+                                <a href="javascript:;" class="menu-item sub-item"
+                                    <?php
+                                    $menu_type = !empty($sub_item->sub_button) ? 'main_menu' : $sub_item->type;
+                                    echo "data-type='$menu_type' data-name='$sub_item->name' data-key='$sub_item->key'
+                                    data-media-id='$sub_item->media_id' data-url='$sub_item->url' " ?> ><?php echo $sub_item->name; ?>
+                                </a>
+                                <a href="javascript:;" class="min-menu min-sub-menu">-</a>
+                            </li>
+                        <?php } ?>
+                    <?php } ?>
+                </ul>
+            </li>
+            <?php }
+            } ?>
         </ul>
     </div>
     <ul id="menu-setting">
@@ -116,6 +117,7 @@ if($_POST) {
     </ul>
     <p class="return-msg"><?php echo isset($create_menu_msg) ? $create_menu_msg->errmsg : '';?></p>
     <button id="menu-submit" class="button button-primary">保存菜单更改</button>
+    <?php } // ~ if($menus) ?>
 </div>
 
 <script>
