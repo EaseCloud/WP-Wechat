@@ -14,6 +14,9 @@ Text Domain: wp_wechat
 
 define('WXD', 'wp_wechat');
 
+include_once 'wechat-php-sdk/wechat.class.php';
+include_once 'wechat-php-sdk/errCode.php';
+
 /**
  * 引入类文件
  * TODO: 存疑，动态引入库是否会有安全性考虑？
@@ -129,7 +132,21 @@ add_action('admin_init', function() {
 /**
  * Enqueue JSSDK
  */
-add_action( 'wp_enqueue_scripts', function() {
+add_action('wp_enqueue_scripts', function() {
     // http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html
-    wp_enqueue_script('jweixin', get_template_directory_uri() . '/lib/jweixin-1.0.0.js', array(), '1.0.0');
+    wp_enqueue_script(
+        'jweixin',
+        get_template_directory_uri() . '/lib/jweixin-1.0.0.js',
+        array(),
+        '1.0.0',
+        false
+    );
+});
+
+
+/**
+ * 签名 JSSDK
+ */
+add_action('wp_head', function() {
+    require 'header-jssdk.php';
 });

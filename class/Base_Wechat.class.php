@@ -20,11 +20,11 @@ class Base_Wechat {
 
     // 微信应用ID
     // option(wx_app_id)
-    protected $app_id;
+    public $app_id;
 
     // 应用密钥
     // option(wx_app_secret)
-    protected $app_secret;
+    public $app_secret;
 
     // 最近一次获取access toke的时间
     protected $token_modified_time;
