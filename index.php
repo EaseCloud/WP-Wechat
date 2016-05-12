@@ -21,15 +21,15 @@ include_once 'wechat-php-sdk/errCode.php';
  * 引入类文件
  * TODO: 存疑，动态引入库是否会有安全性考虑？
  */
-foreach(glob(__DIR__.'/class/*.class.php') as $class_file) {
+foreach (glob(__DIR__ . '/class/*.class.php') as $class_file) {
     include_once $class_file;
 }
 
 /**
  * 翻译支持
  */
-add_action('plugins_loaded', function() {
-    load_textdomain(WXD, __DIR__.'/languages/zh_CN.mo');
+add_action('plugins_loaded', function () {
+    load_textdomain(WXD, __DIR__ . '/languages/zh_CN.mo');
 });
 
 
@@ -51,11 +51,12 @@ add_action('admin_menu', function () {
 
     // 添加CSS文件
     add_action('admin_print_styles-' . $page, function () {
-        wp_register_style( 'wp-wechat', plugins_url( 'wp-wechat/css/style.css' ), array(), 1);
-        wp_enqueue_style( 'wp-wechat', plugins_url( 'wp-wechat/css/style.css' ), array(), 1 );
+        wp_register_style('wp-wechat', plugins_url('wp-wechat/css/style.css'), array(), 1);
+        wp_enqueue_style('wp-wechat', plugins_url('wp-wechat/css/style.css'), array(), 1);
     });
 
-    function wechat_plugin_options() {
+    function wechat_plugin_options()
+    {
         include_once 'option-page.php';
     }
 });
@@ -64,12 +65,12 @@ add_action('admin_menu', function () {
  * Step 2. Register the plugin settings.
  * Referring: https://codex.wordpress.org/Settings_API
  */
-add_action('admin_init', function() {
+add_action('admin_init', function () {
 
     add_settings_section(
         'section-basic',                            // id
         __('Basic Settings', WXD),                  // title
-        function() {                                // callback
+        function () {                                // callback
             _e('Set the basic Wechat account info here.', WXD);
         },
         'options-wechat'                            // page
@@ -83,7 +84,7 @@ add_action('admin_init', function() {
 //        'options-wechat'                            // page
 //    );
 
-    foreach(WP_Wechat::$OPTION_FIELDS as $field_name => $args) {
+    foreach (WP_Wechat::$OPTION_FIELDS as $field_name => $args) {
 
         register_setting(WP_Wechat::$OPTION_GROUP, $field_name);
 
@@ -104,7 +105,8 @@ add_action('admin_init', function() {
 
     }
 
-    function _wechat_field_renderer($args) {
+    function _wechat_field_renderer($args)
+    {
         $field_name = $args['field_name'];
         $field_title = @$args['title'] ?: $field_name;
         $field_type = @$args['type'] ?: 'text';
@@ -112,15 +114,15 @@ add_action('admin_init', function() {
         $field_description = @$args['description'] ?: '';
         ?>
         <input class="<?php echo $field_class; ?>"
-               type="<?php echo $field_type;?>"
-               id="<?php echo $field_name;?>"
-               value="<?php form_option($field_name);?>"
-               name="<?php echo $field_name;?>"
-               aria-describedby="<?php echo $field_name;?>-description"
-               <?php echo @$args['readonly'] ? 'readonly' : ''; ?>
+               type="<?php echo $field_type; ?>"
+               id="<?php echo $field_name; ?>"
+               value="<?php form_option($field_name); ?>"
+               name="<?php echo $field_name; ?>"
+               aria-describedby="<?php echo $field_name; ?>-description"
+            <?php echo @$args['readonly'] ? 'readonly' : ''; ?>
             />
         <p class="description"
-           id="<?php echo $field_name;?>-description"><?php
+           id="<?php echo $field_name; ?>-description"><?php
             echo $field_description;
             ?></p>
         <?php
@@ -132,11 +134,11 @@ add_action('admin_init', function() {
 /**
  * Enqueue JSSDK
  */
-add_action('wp_enqueue_scripts', function() {
+add_action('wp_enqueue_scripts', function () {
     // http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html
     wp_enqueue_script(
         'jweixin',
-        get_template_directory_uri() . '/lib/jweixin-1.0.0.js',
+        plugin_dir_url(__FILE__) . '/js/jweixin-1.0.0.js',
         array(),
         '1.0.0',
         false
@@ -147,6 +149,6 @@ add_action('wp_enqueue_scripts', function() {
 /**
  * 签名 JSSDK
  */
-add_action('wp_head', function() {
+add_action('wp_head', function () {
     require 'header-jssdk.php';
 });
