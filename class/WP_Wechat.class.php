@@ -20,6 +20,16 @@ class WP_Wechat extends Base_Wechat {
             'title' => '微信 APP Secret',
             'description' => '开发者中心的 APP Secret',
         ),
+        'wx_mch_id' => array(
+            'title' => '微信支付商户号',
+            'description' => '微信支付商户号',
+        ),
+        'wx_mch_key' => array(
+            'title' => '微信支付密钥',
+            'description' => "
+                KEY：商户支付密钥，参考开户邮件设置（必须配置，登录商户平台自行设置）
+                置地址：https://pay.weixin.qq.com/index.php/account/api_cert",
+        ),
         'wx_self_id' => array(
             'title' => '公众号微信号',
             'description' => '公众号微信号'
@@ -59,6 +69,8 @@ class WP_Wechat extends Base_Wechat {
         parent::__construct(
             get_option('wx_app_id', null),
             get_option('wx_app_secret', null),
+            get_option('wx_mch_id', null),
+            get_option('wx_mch_key', null),
             get_option('wx_token', null),
             get_option('wx_access_token', null),
             get_option('wx_token_expire', null),
