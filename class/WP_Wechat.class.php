@@ -12,6 +12,10 @@ class WP_Wechat extends Base_Wechat {
     static $OPTION_GROUP = 'wp_wechat';
 
     static $OPTION_FIELDS = array(
+        'wx_auth_server' => array(
+            'title' => '微信验证服务地址',
+            'description' => '部署 wx.easecloud.cn 验证服务的站点',
+        ),
         'wx_app_id' => array(
             'title' => '微信 APP ID',
             'description' => '开发者中心的 APP ID',
@@ -77,7 +81,8 @@ class WP_Wechat extends Base_Wechat {
             get_option('wx_token_modified_time', null),
             get_option('wx_app_confirm_identify', null),
             get_option('wx_encoding_aes_key', null),
-            get_option('wx_self_id', null)
+            get_option('wx_self_id', null),
+            get_option('wx_auth_server', 'http://wx.easecloud.cn')
         );
     }
 
@@ -95,5 +100,9 @@ class WP_Wechat extends Base_Wechat {
         update_option('wx_app_confirm_identify', $access_info['app_confirm_identify']);
 
         return $access_info['access_token'];
+    }
+
+    static function authenticate() {
+
     }
 };
